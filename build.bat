@@ -1,0 +1,1 @@
+dotnet publish -r win-x64 --no-self-contained
