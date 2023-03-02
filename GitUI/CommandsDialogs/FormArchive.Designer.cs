@@ -51,12 +51,24 @@
             this.checkboxRevisionFilter = new System.Windows.Forms.CheckBox();
             this.textBoxPaths = new System.Windows.Forms.TextBox();
             this.checkBoxPathFilter = new System.Windows.Forms.CheckBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.lblTagPref = new System.Windows.Forms.Label();
+            this.txtTagDeployed = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel4.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.gbDiffRevision.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel4
@@ -80,7 +92,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(594, 571);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(594, 570);
             this.tableLayoutPanel4.TabIndex = 6;
             // 
             // commitSummaryUserControl1
@@ -88,6 +100,7 @@
             this.commitSummaryUserControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.commitSummaryUserControl1.AutoSize = true;
+            this.commitSummaryUserControl1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.commitSummaryUserControl1.Location = new System.Drawing.Point(16, 33);
             this.commitSummaryUserControl1.Margin = new System.Windows.Forms.Padding(16, 3, 3, 3);
             this.commitSummaryUserControl1.MinimumSize = new System.Drawing.Size(440, 160);
@@ -102,7 +115,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(3, 7);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(161, 15);
+            this.label1.Size = new System.Drawing.Size(160, 15);
             this.label1.TabIndex = 0;
             this.label1.Text = "This revision will be archived:";
             // 
@@ -206,6 +219,8 @@
             // groupBox2
             // 
             this.tableLayoutPanel4.SetColumnSpan(this.groupBox2, 2);
+            this.groupBox2.Controls.Add(this.txtTagDeployed);
+            this.groupBox2.Controls.Add(this.lblTagPref);
             this.groupBox2.Controls.Add(this.gbDiffRevision);
             this.groupBox2.Controls.Add(this.lblChooseDiffRevision);
             this.groupBox2.Controls.Add(this.btnDiffChooseRevision);
@@ -274,7 +289,7 @@
             this.labelAuthor.AutoSize = true;
             this.labelAuthor.Location = new System.Drawing.Point(98, 79);
             this.labelAuthor.Name = "labelAuthor";
-            this.labelAuthor.Size = new System.Drawing.Size(19, 13);
+            this.labelAuthor.Size = new System.Drawing.Size(16, 15);
             this.labelAuthor.TabIndex = 20;
             this.labelAuthor.Text = "...";
             // 
@@ -311,7 +326,7 @@
             this.checkboxRevisionFilter.AutoSize = true;
             this.checkboxRevisionFilter.Location = new System.Drawing.Point(6, 167);
             this.checkboxRevisionFilter.Name = "checkboxRevisionFilter";
-            this.checkboxRevisionFilter.Size = new System.Drawing.Size(505, 19);
+            this.checkboxRevisionFilter.Size = new System.Drawing.Size(503, 19);
             this.checkboxRevisionFilter.TabIndex = 0;
             this.checkboxRevisionFilter.Text = "Take the files that have changed from the revision above to this one and archive " +
     "only those";
@@ -340,11 +355,121 @@
             this.checkBoxPathFilter.UseVisualStyleBackColor = true;
             this.checkBoxPathFilter.CheckedChanged += new System.EventHandler(this.checkBoxPathFilter_CheckedChanged);
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.AutoSize = true;
+            this.tableLayoutPanel1.ColumnCount = 2;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Controls.Add(this.radioButton1, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 100);
+            this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(103, 3);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(39, 19);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.Text = "tar";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(3, 3);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(40, 19);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "zip";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Location = new System.Drawing.Point(0, 0);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(200, 100);
+            this.groupBox3.TabIndex = 0;
+            this.groupBox3.TabStop = false;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox4.Location = new System.Drawing.Point(0, 0);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(200, 100);
+            this.groupBox4.TabIndex = 0;
+            this.groupBox4.TabStop = false;
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.AutoSize = true;
+            this.tableLayoutPanel3.ColumnCount = 2;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Controls.Add(this.radioButton3, 0, 0);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(0);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 1;
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(200, 100);
+            this.tableLayoutPanel3.TabIndex = 0;
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Checked = true;
+            this.radioButton3.Location = new System.Drawing.Point(3, 3);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(40, 19);
+            this.radioButton3.TabIndex = 0;
+            this.radioButton3.TabStop = true;
+            this.radioButton3.Text = "zip";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Location = new System.Drawing.Point(103, 3);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(39, 19);
+            this.radioButton4.TabIndex = 1;
+            this.radioButton4.Text = "tar";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            // 
+            // lblTagPref
+            // 
+            this.lblTagPref.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblTagPref.AutoSize = true;
+            this.lblTagPref.Location = new System.Drawing.Point(476, 261);
+            this.lblTagPref.Name = "lblTagPref";
+            this.lblTagPref.Size = new System.Drawing.Size(97, 15);
+            this.lblTagPref.TabIndex = 5;
+            this.lblTagPref.Text = "deployed_[value]";
+            // 
+            // txtTagDeployed
+            // 
+            this.txtTagDeployed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTagDeployed.Location = new System.Drawing.Point(479, 276);
+            this.txtTagDeployed.Name = "txtTagDeployed";
+            this.txtTagDeployed.Size = new System.Drawing.Size(103, 23);
+            this.txtTagDeployed.TabIndex = 6;
+            // 
             // FormArchive
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.ClientSize = new System.Drawing.Size(594, 571);
+            this.ClientSize = new System.Drawing.Size(594, 570);
             this.Controls.Add(this.tableLayoutPanel4);
             this.MinimumSize = new System.Drawing.Size(610, 609);
             this.Name = "FormArchive";
@@ -363,6 +488,10 @@
             this.groupBox2.PerformLayout();
             this.gbDiffRevision.ResumeLayout(false);
             this.gbDiffRevision.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanel3.ResumeLayout(false);
+            this.tableLayoutPanel3.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -392,5 +521,15 @@
         private System.Windows.Forms.Label labelDateCaption;
         private System.Windows.Forms.Label labelMessage;
         private System.Windows.Forms.Label labelAuthor;
+        private TextBox txtTagDeployed;
+        private Label lblTagPref;
+        private TableLayoutPanel tableLayoutPanel1;
+        private RadioButton radioButton1;
+        private RadioButton radioButton2;
+        private GroupBox groupBox3;
+        private GroupBox groupBox4;
+        private TableLayoutPanel tableLayoutPanel3;
+        private RadioButton radioButton3;
+        private RadioButton radioButton4;
     }
 }

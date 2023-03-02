@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="..\..\GitExtUtils\Validates.cs" Link="Validates.cs" />
   </ItemGroup>

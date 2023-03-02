@@ -604,7 +604,8 @@ namespace GitUI.UserControls.RevisionGrid
             foreach (int index in _toBeSelectedGraphIndexesCache.Value)
             {
                 Rows[index].Selected = true;
-
+                var text = Rows[index].Cells[1].Value;
+                var hash = Rows[index].Cells[5].Value;
                 if (first)
                 {
                     first = false;

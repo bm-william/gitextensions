@@ -3,6 +3,7 @@
   <PropertyGroup>
     <!-- To be removed when NRT annotations are complete -->
     <Nullable>annotations</Nullable>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
