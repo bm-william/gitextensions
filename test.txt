@@ -1,0 +1,1 @@
+["C:\\Program Files\\nodejs\\node.exe","D:\\projects\\node\\bm-save-commit-hash\\save-hash.js","$GIT_COMMAND","D:\\projects\\forks\\gitextensions\\"]

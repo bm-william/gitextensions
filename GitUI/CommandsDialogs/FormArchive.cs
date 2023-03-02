@@ -136,8 +136,27 @@ namespace GitUI.CommandsDialogs
             {
                 string format = GetSelectedOutputFormat() == OutputFormat.Zip ? "zip" : "tar";
 
-                var arguments = string.Format(@"archive --format=""{0}"" {1} --output ""{2}"" {3}", format, revision, saveFileDialog.FileName, GetPathArgumentFromGui());
+                var arguments = string.Format(@"archive --format=""{0}"" {1} --output ""{2}"" {3} --add-virtual-file .commit-hash:{4}", format, revision, saveFileDialog.FileName, GetPathArgumentFromGui(), revision);
                 FormProcess.ShowDialog(this, arguments, Module.WorkingDir, input: null, useDialogSettings: true);
+
+                if (txtTagDeployed.Text.Trim() != "")
+                {
+                    var tag = txtTagDeployed.Text.Trim();
+                    if (!tag.StartsWith("deployed_"))
+                    {
+                        tag = "deployed_" + tag;
+                    }
+
+                    arguments = string.Format(@"push ""origin"" :refs/tags/{0}", tag);
+                    FormProcess.ShowDialog(this, arguments, Module.WorkingDir, input: null, useDialogSettings: true);
+
+                    arguments = string.Format(@"tag -f ""{0}""  -- {1}", tag, revision);
+                    FormProcess.ShowDialog(this, arguments, Module.WorkingDir, input: null, useDialogSettings: true);
+
+                    arguments = string.Format(@"push --progress ""origin"" tag ""{0}""", tag);
+                    FormProcess.ShowDialog(this, arguments, Module.WorkingDir, input: null, useDialogSettings: true);
+                }
+
                 Close();
             }
         }
