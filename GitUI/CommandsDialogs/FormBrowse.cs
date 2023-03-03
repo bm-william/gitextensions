@@ -2973,5 +2973,35 @@ namespace GitUI.CommandsDialogs
         {
             _dashboard?.RefreshContent();
         }
+
+        private void openGitHubRepoToolStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                var t = new GitModule(Module.WorkingDir);
+                var remote = t.GetRemotesAsync();
+                Task.Run((Action)(() =>
+                {
+#pragma warning disable VSTHRD002 // Avoid problematic synchronous waits
+                    remote.Wait();
+                    var po = remote.Result;
+#pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
+                    foreach (var p in po)
+                    {
+                        if (p.PushUrls.Count > 0)
+                        {
+                            if (p.PushUrls[0].Contains("github.com:BmInformatica"))
+                            {
+                                Process.Start("explorer", p.PushUrls[0].Replace("git@github.com:BmInformatica/", "https://github.com/BmInformatica/"));
+                                return;
+                            }
+                        }
+                    }
+                }));
+            }
+            catch (Exception)
+            {
+            }
+        }
     }
 }
