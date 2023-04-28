@@ -1,4 +1,8 @@
-﻿using GitCommands;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
+using GitCommands;
 using GitUI.HelperDialogs;
 using GitUIPluginInterfaces;
 using ResourceManager;
@@ -134,9 +138,79 @@ namespace GitUI.CommandsDialogs
             };
             if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
             {
+                var commitHashFrom = commitSummaryUserControl1.Revision.Guid;
+                var commitHashTo = gbDiffRevision.Text;
+
+                List<string> deletedFiles = null;
+
+                if (commitHashTo != "...")
+                {
+                    try
+                    {
+                        var arguments1 = string.Format(@"ls-tree -r --name-only {0}", commitHashFrom);
+                        var psi = new ProcessStartInfo("git", arguments1);
+                        psi.WorkingDirectory = Module.WorkingDir;
+                        psi.RedirectStandardError = true;
+                        psi.RedirectStandardOutput = true;
+                        var p = Process.Start(psi);
+
+                        var output = new List<byte>();
+                        var chr = p.StandardOutput.Read();
+                        while (chr >= 0)
+                        {
+                            output.Add((byte)chr);
+                            chr = p.StandardOutput.Read();
+                        }
+
+                        var s = new MemoryStream(output.ToArray());
+                        var sr = new StreamReader(s);
+
+                        var currentContents = (sr.ReadToEnd() ?? "").Split("\n", StringSplitOptions.RemoveEmptyEntries);
+
+                        arguments1 = string.Format(@"diff-tree -r --exit-code --name-only {0} {1}", commitHashFrom, commitHashTo);
+                        psi = new ProcessStartInfo("git", arguments1);
+                        psi.WorkingDirectory = Module.WorkingDir;
+                        psi.RedirectStandardError = true;
+                        psi.RedirectStandardOutput = true;
+                        p = Process.Start(psi);
+
+                        output = new List<byte>();
+                        chr = p.StandardOutput.Read();
+                        while (chr >= 0)
+                        {
+                            output.Add((byte)chr);
+                            chr = p.StandardOutput.Read();
+                        }
+
+                        s = new MemoryStream(output.ToArray());
+                        sr = new StreamReader(s);
+
+                        var diffContents = (sr.ReadToEnd() ?? "").Split("\n", StringSplitOptions.RemoveEmptyEntries);
+
+                        deletedFiles = new List<string>();
+                        foreach (var fileNonPresente in diffContents)
+                        {
+                            if (!currentContents.Contains(fileNonPresente))
+                            {
+                                deletedFiles.Add(fileNonPresente);
+                            }
+                        }
+
+                        if (deletedFiles.Count <= 0)
+                        {
+                            deletedFiles = null;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Errore generazione .deleted-files:\n" + ex.Message, "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        deletedFiles = null;
+                    }
+                }
+
                 string format = GetSelectedOutputFormat() == OutputFormat.Zip ? "zip" : "tar";
 
-                var arguments = string.Format(@"archive --format=""{0}"" {1} --output ""{2}"" {3} --add-virtual-file .commit-hash:{4}", format, revision, saveFileDialog.FileName, GetPathArgumentFromGui(), revision);
+                var arguments = string.Format(@"archive --format=""{0}"" {1} --output ""{2}"" {3} --add-virtual-file .commit-hash:{4} {5}", format, revision, saveFileDialog.FileName, GetPathArgumentFromGui(), revision, deletedFiles != null ? "--add-virtual-file .deleted-files:\"" + deletedFiles.Join("\n") + "\"" : "");
                 FormProcess.ShowDialog(this, arguments, Module.WorkingDir, input: null, useDialogSettings: true);
 
                 if (txtTagDeployed.Text.Trim() != "")

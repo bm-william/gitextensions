@@ -40,6 +40,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnChooseRevision = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtTagDeployed = new System.Windows.Forms.TextBox();
+            this.lblTagPref = new System.Windows.Forms.Label();
             this.gbDiffRevision = new System.Windows.Forms.GroupBox();
             this.labelAuthorCaption = new System.Windows.Forms.Label();
             this.labelDateCaption = new System.Windows.Forms.Label();
@@ -52,15 +54,13 @@
             this.textBoxPaths = new System.Windows.Forms.TextBox();
             this.checkBoxPathFilter = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.lblTagPref = new System.Windows.Forms.Label();
-            this.txtTagDeployed = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel4.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -237,6 +237,24 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filter files";
             // 
+            // txtTagDeployed
+            // 
+            this.txtTagDeployed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTagDeployed.Location = new System.Drawing.Point(479, 276);
+            this.txtTagDeployed.Name = "txtTagDeployed";
+            this.txtTagDeployed.Size = new System.Drawing.Size(103, 23);
+            this.txtTagDeployed.TabIndex = 6;
+            // 
+            // lblTagPref
+            // 
+            this.lblTagPref.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblTagPref.AutoSize = true;
+            this.lblTagPref.Location = new System.Drawing.Point(476, 261);
+            this.lblTagPref.Name = "lblTagPref";
+            this.lblTagPref.Size = new System.Drawing.Size(97, 15);
+            this.lblTagPref.TabIndex = 5;
+            this.lblTagPref.Text = "deployed_[value]";
+            // 
             // gbDiffRevision
             // 
             this.gbDiffRevision.Controls.Add(this.labelAuthorCaption);
@@ -370,16 +388,6 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(200, 100);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(103, 3);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(39, 19);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "tar";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
             // radioButton1
             // 
             this.radioButton1.AutoSize = true;
@@ -391,6 +399,16 @@
             this.radioButton1.TabStop = true;
             this.radioButton1.Text = "zip";
             this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(103, 3);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(39, 19);
+            this.radioButton2.TabIndex = 1;
+            this.radioButton2.Text = "tar";
+            this.radioButton2.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
@@ -446,24 +464,6 @@
             this.radioButton4.TabIndex = 1;
             this.radioButton4.Text = "tar";
             this.radioButton4.UseVisualStyleBackColor = true;
-            // 
-            // lblTagPref
-            // 
-            this.lblTagPref.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblTagPref.AutoSize = true;
-            this.lblTagPref.Location = new System.Drawing.Point(476, 261);
-            this.lblTagPref.Name = "lblTagPref";
-            this.lblTagPref.Size = new System.Drawing.Size(97, 15);
-            this.lblTagPref.TabIndex = 5;
-            this.lblTagPref.Text = "deployed_[value]";
-            // 
-            // txtTagDeployed
-            // 
-            this.txtTagDeployed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTagDeployed.Location = new System.Drawing.Point(479, 276);
-            this.txtTagDeployed.Name = "txtTagDeployed";
-            this.txtTagDeployed.Size = new System.Drawing.Size(103, 23);
-            this.txtTagDeployed.TabIndex = 6;
             // 
             // FormArchive
             // 
