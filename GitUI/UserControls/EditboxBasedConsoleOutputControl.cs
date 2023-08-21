@@ -106,20 +106,44 @@ namespace GitUI.UserControls
 
                 // process used to execute external commands
                 var outputEncoding = GitModule.SystemEncoding;
-                ProcessStartInfo startInfo = new()
+                string pathTmpWorkaround = null;
+                ProcessStartInfo startInfo = null;
+                if (arguments.Length >= 30000 && command.EndsWith("git.exe"))
                 {
-                    UseShellExecute = false,
-                    ErrorDialog = false,
-                    CreateNoWindow = !ssh && !AppSettings.ShowGitCommandLine,
-                    RedirectStandardInput = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    StandardOutputEncoding = outputEncoding,
-                    StandardErrorEncoding = outputEncoding,
-                    FileName = command,
-                    Arguments = arguments,
-                    WorkingDirectory = workDir
-                };
+                    pathTmpWorkaround = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "psWorkaround" + DateTime.Now.Ticks + ".ps1");
+                    File.WriteAllText(pathTmpWorkaround, "git " + arguments);
+                    startInfo = new()
+                    {
+                        UseShellExecute = false,
+                        ErrorDialog = false,
+                        CreateNoWindow = !ssh && !AppSettings.ShowGitCommandLine,
+                        RedirectStandardInput = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        StandardOutputEncoding = outputEncoding,
+                        StandardErrorEncoding = outputEncoding,
+                        FileName = "powershell",
+                        Arguments = pathTmpWorkaround,
+                        WorkingDirectory = workDir
+                    };
+                }
+                else
+                {
+                    startInfo = new()
+                    {
+                        UseShellExecute = false,
+                        ErrorDialog = false,
+                        CreateNoWindow = !ssh && !AppSettings.ShowGitCommandLine,
+                        RedirectStandardInput = true,
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        StandardOutputEncoding = outputEncoding,
+                        StandardErrorEncoding = outputEncoding,
+                        FileName = command,
+                        Arguments = arguments,
+                        WorkingDirectory = workDir
+                    };
+                }
 
                 foreach (var (name, value) in envVariables)
                 {
@@ -152,6 +176,18 @@ namespace GitUI.UserControls
                             catch (Exception ex)
                             {
                                 operation.LogProcessEnd(ex);
+                            }
+
+                            if (pathTmpWorkaround != null)
+                            {
+                                try
+                                {
+                                    File.Delete(pathTmpWorkaround);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex.ToString());
+                                }
                             }
 
                             _exitcode = _process.ExitCode;

@@ -71,9 +71,18 @@ namespace GitUI.HelperDialogs
         public static bool ShowDialog(IWin32Window? owner, ArgumentString arguments, string workingDirectory, string? input, bool useDialogSettings, string? process = null)
         {
             Debug.Assert(owner is not null, "Progress window must be owned by another window! This is a bug, please correct and send a pull request with a fix.");
+            if (arguments.Length >= 30000)
+            {
+                AppSettings.UseConsoleEmulatorForCommands = false;
+            }
 
             using FormProcess formProcess = new(commands: null, arguments, workingDirectory, input, useDialogSettings, process);
             formProcess.ShowDialog(owner);
+            if (arguments.Length >= 30000)
+            {
+                AppSettings.UseConsoleEmulatorForCommands = true;
+            }
+
             return !formProcess.ErrorOccurred();
         }
 
