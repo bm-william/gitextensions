@@ -1,6 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using GitCommands;
 using GitExtUtils.GitUI;
 using GitExtUtils.GitUI.Theming;
@@ -84,40 +85,48 @@ namespace GitUI.UserControls.RevisionGrid.Columns
             var lines = GetCommitMessageLines(revision);
             foreach (var line in lines)
             {
-                var rx = new Regex("^([\\w\\d/,\\s]+):");
+                var rx = new Regex("^([\\w\\d/,&\\s]+):");
                 var matches = rx.Matches(line);
                 foreach (Match match in matches)
                 {
                     var val = match.Value.Trim();
-                    val = val.Replace("/", ", ");
+                    val = val.Replace("/", ", ").Replace("&", ", ");
                     if (val == "edittable,js:")
                     {
                         continue;
                     }
 
                     var splits = val.Split(',');
+                    var bundlesNames = new List<string>();
                     foreach (var split in splits)
                     {
                         if (!split.Trim().Contains(' '))
                         {
-                            var name = split.Trim().Replace(":", "");
+                            var name = split.Trim().Replace(":", "").Replace("bundle", "Bundle");
                             if (!name.EndsWith("Bundle"))
                             {
                                 name += "Bundle";
                             }
 
-                            RevisionGridRefRenderer.DrawRef(
-                                e.State.HasFlag(DataGridViewElementStates.Selected),
-                                style.NormalFont,
-                                ref offset,
-                                name,
-                                Color.Orange,
-                                RefArrowType.None,
-                                messageBounds,
-                                e.Graphics,
-                                dashedLine: false,
-                                fill: AppSettings.FillRefLabels);
+                            bundlesNames.Add(name);
                         }
+                    }
+
+                    bundlesNames = bundlesNames.OrderBy(e => e).ToList();
+
+                    foreach (var name in bundlesNames)
+                    {
+                        RevisionGridRefRenderer.DrawRef(
+                            e.State.HasFlag(DataGridViewElementStates.Selected),
+                            style.NormalFont,
+                            ref offset,
+                            name,
+                            Color.Orange,
+                            RefArrowType.None,
+                            messageBounds,
+                            e.Graphics,
+                            dashedLine: false,
+                            fill: AppSettings.FillRefLabels);
                     }
                 }
             }
