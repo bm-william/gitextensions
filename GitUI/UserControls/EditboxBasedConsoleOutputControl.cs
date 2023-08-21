@@ -110,7 +110,13 @@ namespace GitUI.UserControls
                 ProcessStartInfo startInfo = null;
                 if (arguments.Length >= 30000 && command.EndsWith("git.exe"))
                 {
-                    pathTmpWorkaround = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "psWorkaround" + DateTime.Now.Ticks + ".ps1");
+                    pathTmpWorkaround = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "bmGitExtensions");
+                    if (!Directory.Exists(pathTmpWorkaround))
+                    {
+                        Directory.CreateDirectory(pathTmpWorkaround);
+                    }
+
+                    pathTmpWorkaround = Path.Combine(pathTmpWorkaround, "psWorkaround" + DateTime.Now.Ticks + ".ps1");
                     File.WriteAllText(pathTmpWorkaround, "git " + arguments);
                     startInfo = new()
                     {

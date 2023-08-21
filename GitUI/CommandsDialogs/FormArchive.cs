@@ -210,7 +210,7 @@ namespace GitUI.CommandsDialogs
 
                 string format = GetSelectedOutputFormat() == OutputFormat.Zip ? "zip" : "tar";
 
-                var arguments = string.Format(@"archive --format=""{0}"" {1} --output ""{2}"" {3} --add-virtual-file .commit-hash:{4} {5}", format, revision, saveFileDialog.FileName, GetPathArgumentFromGui(), revision, deletedFiles != null ? "--add-virtual-file .deleted-files:\"" + deletedFiles.Join("\n") + "\"" : "");
+                var arguments = string.Format(@"archive --format=""{0}"" {1} --output ""{2}"" {3} --add-virtual-file .commit-hash:{4} {5}", format, revision, saveFileDialog.FileName, GetPathArgumentFromGui(), revision, deletedFiles != null ? "--add-virtual-file .deleted-files:\"" + deletedFiles.Join("\\n") + "\"" : "");
                 FormProcess.ShowDialog(this, arguments, Module.WorkingDir, input: null, useDialogSettings: true);
 
                 if (txtTagDeployed.Text.Trim() != "")
