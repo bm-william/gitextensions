@@ -123,11 +123,6 @@ namespace GitUI.UserControls
                     var pathOut = Regex.Match(arguments, "--output \\\"([^\\\"]+)\\\"").Groups[1].Value;
                     pathOut = "/mnt/" + pathOut[0].ToString().ToLower() + pathOut.Substring(2).Replace("\\", "/");
                     File.WriteAllText(pathTmpWorkaround, "cd \"" + workDirLinux + "\"\ngit " + Regex.Replace(arguments, "--output \\\"([^\\\"]+)\\\"", "--output \"" + pathOut + "\""));
-                    if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "system32", "bash.exe")))
-                    {
-                        MessageBox.Show("E' necessario installare Bash for windows.\n\n- Lanciare il comando \"wsl --install\" da powershell\n- Riavviare il sistema\n- Eseguire la prima configurazione lanciando il comando \"bash\"\n- Installare git con \"apt install git\" su bash", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        throw new Exception("Bash non installato");
-                    }
 
                     startInfo = new()
                     {

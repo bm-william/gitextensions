@@ -237,7 +237,10 @@ namespace GitUI.CommandsDialogs
                         using (var z = new ZipArchive(fs, ZipArchiveMode.Update))
                         {
                             z.CreateEntryFromFile(Path.Combine(pathTmpWorkaround, ".commit-hash"), ".commit-hash");
-                            z.CreateEntryFromFile(Path.Combine(pathTmpWorkaround, ".deleted-files"), ".deleted-files");
+                            if (File.Exists(Path.Combine(pathTmpWorkaround, ".deleted-files")))
+                            {
+                                z.CreateEntryFromFile(Path.Combine(pathTmpWorkaround, ".deleted-files"), ".deleted-files");
+                            }
                         }
                     }
                 }
