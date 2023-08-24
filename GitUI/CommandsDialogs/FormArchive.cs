@@ -1,9 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System.Configuration;
+using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Text;
 using System.Text.RegularExpressions;
 using GitCommands;
 using GitUI.HelperDialogs;
+using GitUI.Properties;
 using GitUIPluginInterfaces;
 using ResourceManager;
 
@@ -210,8 +213,50 @@ namespace GitUI.CommandsDialogs
 
                 string format = GetSelectedOutputFormat() == OutputFormat.Zip ? "zip" : "tar";
 
-                var arguments = string.Format(@"archive --format=""{0}"" {1} --output ""{2}"" {3} --add-virtual-file .commit-hash:{4} {5}", format, revision, saveFileDialog.FileName, GetPathArgumentFromGui(), revision, deletedFiles != null ? "--add-virtual-file .deleted-files:\"" + deletedFiles.Join("\\n") + "\"" : "");
+                var pathTmpWorkaround = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "bmGitExtensions");
+                if (!Directory.Exists(pathTmpWorkaround))
+                {
+                    Directory.CreateDirectory(pathTmpWorkaround);
+                }
+
+                pathTmpWorkaround = Path.Combine(pathTmpWorkaround, revision + DateTime.Now.Ticks.ToString());
+                Directory.CreateDirectory(pathTmpWorkaround);
+                File.WriteAllText(Path.Combine(pathTmpWorkaround, ".commit-hash"), revision);
+                if (deletedFiles != null)
+                {
+                    File.WriteAllText(Path.Combine(pathTmpWorkaround, ".deleted-files"), deletedFiles.Join("\n"));
+                }
+
+                var arguments = string.Format(@"archive --format=""{0}"" {1} --output ""{2}"" {3}", format, revision, saveFileDialog.FileName, GetPathArgumentFromGui());
+                var zipPath = saveFileDialog.FileName;
                 FormProcess.ShowDialog(this, arguments, Module.WorkingDir, input: null, useDialogSettings: true);
+                try
+                {
+                    using (var fs = new FileStream(zipPath, FileMode.Open))
+                    {
+                        using (var z = new ZipArchive(fs, ZipArchiveMode.Update))
+                        {
+                            z.CreateEntryFromFile(Path.Combine(pathTmpWorkaround, ".commit-hash"), ".commit-hash");
+                            z.CreateEntryFromFile(Path.Combine(pathTmpWorkaround, ".deleted-files"), ".deleted-files");
+                        }
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Errore aggiunta file .commit-hash e .deleted-files allo zip", "Errore", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                if (File.Exists(Path.Combine(pathTmpWorkaround, ".deleted-files")))
+                {
+                    File.Delete(Path.Combine(pathTmpWorkaround, ".deleted-files"));
+                }
+
+                if (File.Exists(Path.Combine(pathTmpWorkaround, ".commit-hash")))
+                {
+                    File.Delete(Path.Combine(pathTmpWorkaround, ".commit-hash"));
+                }
+
+                Directory.Delete(pathTmpWorkaround);
 
                 if (txtTagDeployed.Text.Trim() != "")
                 {

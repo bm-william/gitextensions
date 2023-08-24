@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using System.Text.RegularExpressions;
 using GitCommands;
 using GitCommands.Git.Extensions;
 using GitCommands.Logging;
 using GitUI.Infrastructure;
+using Microsoft.VisualBasic.FileIO;
 using Timer = System.Windows.Forms.Timer;
 
 namespace GitUI.UserControls
@@ -116,8 +118,17 @@ namespace GitUI.UserControls
                         Directory.CreateDirectory(pathTmpWorkaround);
                     }
 
-                    pathTmpWorkaround = Path.Combine(pathTmpWorkaround, "psWorkaround" + DateTime.Now.Ticks + ".ps1");
-                    File.WriteAllText(pathTmpWorkaround, "git " + arguments);
+                    var workDirLinux = "/mnt/" + workDir[0].ToString().ToLower() + workDir.Substring(2).Replace("\\", "/");
+                    pathTmpWorkaround = Path.Combine(pathTmpWorkaround, "psWorkaround" + DateTime.Now.Ticks + ".sh");
+                    var pathOut = Regex.Match(arguments, "--output \\\"([^\\\"]+)\\\"").Groups[1].Value;
+                    pathOut = "/mnt/" + pathOut[0].ToString().ToLower() + pathOut.Substring(2).Replace("\\", "/");
+                    File.WriteAllText(pathTmpWorkaround, "cd \"" + workDirLinux + "\"\ngit " + Regex.Replace(arguments, "--output \\\"([^\\\"]+)\\\"", "--output \"" + pathOut + "\""));
+                    if (!File.Exists(Path.Combine(Environment.GetEnvironmentVariable("SystemRoot"), "system32", "bash.exe")))
+                    {
+                        MessageBox.Show("E' necessario installare Bash for windows.\n\n- Lanciare il comando \"wsl --install\" da powershell\n- Riavviare il sistema\n- Eseguire la prima configurazione lanciando il comando \"bash\"\n- Installare git con \"apt install git\" su bash", "Attenzione", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        throw new Exception("Bash non installato");
+                    }
+
                     startInfo = new()
                     {
                         UseShellExecute = false,
@@ -128,8 +139,8 @@ namespace GitUI.UserControls
                         RedirectStandardError = true,
                         StandardOutputEncoding = outputEncoding,
                         StandardErrorEncoding = outputEncoding,
-                        FileName = "powershell",
-                        Arguments = pathTmpWorkaround,
+                        FileName = "bash.exe",
+                        Arguments = "/mnt/" + pathTmpWorkaround[0].ToString().ToLower() + pathTmpWorkaround.Substring(2).Replace("\\", "/"),
                         WorkingDirectory = workDir
                     };
                 }
