@@ -40,6 +40,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnChooseRevision = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.lstBundles = new System.Windows.Forms.ListBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.txtTagDeployed = new System.Windows.Forms.TextBox();
             this.lblTagPref = new System.Windows.Forms.Label();
             this.gbDiffRevision = new System.Windows.Forms.GroupBox();
@@ -219,6 +221,8 @@
             // groupBox2
             // 
             this.tableLayoutPanel4.SetColumnSpan(this.groupBox2, 2);
+            this.groupBox2.Controls.Add(this.lstBundles);
+            this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.txtTagDeployed);
             this.groupBox2.Controls.Add(this.lblTagPref);
             this.groupBox2.Controls.Add(this.gbDiffRevision);
@@ -236,6 +240,27 @@
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filter files";
+            // 
+            // lstBundles
+            // 
+            this.lstBundles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstBundles.FormattingEnabled = true;
+            this.lstBundles.ItemHeight = 15;
+            this.lstBundles.Location = new System.Drawing.Point(288, 51);
+            this.lstBundles.Name = "lstBundles";
+            this.lstBundles.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.lstBundles.Size = new System.Drawing.Size(266, 79);
+            this.lstBundles.TabIndex = 9;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(283, 34);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(258, 15);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "bundles da esportare (nessuna selezione = tutti)";
             // 
             // txtTagDeployed
             // 
@@ -353,13 +378,11 @@
             // 
             // textBoxPaths
             // 
-            this.textBoxPaths.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBoxPaths.Location = new System.Drawing.Point(21, 52);
             this.textBoxPaths.Multiline = true;
             this.textBoxPaths.Name = "textBoxPaths";
             this.textBoxPaths.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxPaths.Size = new System.Drawing.Size(553, 75);
+            this.textBoxPaths.Size = new System.Drawing.Size(256, 75);
             this.textBoxPaths.TabIndex = 1;
             // 
             // checkBoxPathFilter
@@ -531,5 +554,7 @@
         private TableLayoutPanel tableLayoutPanel3;
         private RadioButton radioButton3;
         private RadioButton radioButton4;
+        private Label label3;
+        private ListBox lstBundles;
     }
 }

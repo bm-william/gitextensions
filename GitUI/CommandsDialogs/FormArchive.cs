@@ -110,6 +110,31 @@ namespace GitUI.CommandsDialogs
             buttonArchiveRevision.Focus();
             checkBoxPathFilter_CheckedChanged(this, EventArgs.Empty);
             checkboxRevisionFilter_CheckedChanged(this, EventArgs.Empty);
+            var pathSrc = Path.Combine(Module.WorkingDir, "src");
+            if (Directory.Exists(pathSrc))
+            {
+                List<string> bundles = new();
+
+                // è crm (forse)
+                foreach (var path in Directory.GetDirectories(pathSrc))
+                {
+                    if (path.EndsWith("Bundle"))
+                    {
+                        var tmp = path;
+                        if (tmp.EndsWith("\\"))
+                        {
+                            tmp = tmp.Substring(0, tmp.Length - 1);
+                        }
+
+                        tmp = tmp.Substring(tmp.LastIndexOf("\\") + 1);
+                        bundles.Add(tmp);
+                    }
+                }
+
+                bundles.Sort();
+                lstBundles.DataSource = bundles.ToArray();
+                lstBundles.SelectedIndex = -1;
+            }
         }
 
         private void Save_Click(object sender, EventArgs e)
@@ -227,7 +252,21 @@ namespace GitUI.CommandsDialogs
                     File.WriteAllText(Path.Combine(pathTmpWorkaround, ".deleted-files"), deletedFiles.Join("\n"));
                 }
 
-                var arguments = string.Format(@"archive --format=""{0}"" {1} --output ""{2}"" {3}", format, revision, saveFileDialog.FileName, GetPathArgumentFromGui());
+                string excludes = "";
+                if (lstBundles.SelectedItems.Count > 0)
+                {
+                    foreach (var i in lstBundles.Items)
+                    {
+                        if (lstBundles.SelectedItems.Contains(i))
+                        {
+                            continue;
+                        }
+
+                        excludes += "\":(exclude)src/" + i + "\" ";
+                    }
+                }
+
+                var arguments = string.Format(@"archive --format=""{0}"" {1} --output ""{2}"" {3} " + excludes, format, revision, saveFileDialog.FileName, GetPathArgumentFromGui());
                 var zipPath = saveFileDialog.FileName;
                 FormProcess.ShowDialog(this, arguments, Module.WorkingDir, input: null, useDialogSettings: true);
                 try

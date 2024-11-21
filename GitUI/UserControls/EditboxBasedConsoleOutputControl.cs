@@ -6,6 +6,8 @@ using GitCommands.Git.Extensions;
 using GitCommands.Logging;
 using GitUI.Infrastructure;
 using Microsoft.VisualBasic.FileIO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Timer = System.Windows.Forms.Timer;
 
 namespace GitUI.UserControls
@@ -118,11 +120,41 @@ namespace GitUI.UserControls
                         Directory.CreateDirectory(pathTmpWorkaround);
                     }
 
-                    var workDirLinux = "/mnt/" + workDir[0].ToString().ToLower() + workDir.Substring(2).Replace("\\", "/");
+                    var pathCustomConfig = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "bmGitExtensions", "wslConfig.json");
+                    string letteraDiscoWindows = "z";
+                    string distribution = "Ubuntu-22.04";
+                    if (File.Exists(pathCustomConfig))
+                    {
+                        var configWsl = JsonConvert.DeserializeObject<JObject>(File.ReadAllText(pathCustomConfig));
+                        string t = (configWsl["letteraDiscoWindows"] ?? "").ToString();
+                        if (t != "")
+                        {
+                            letteraDiscoWindows = t.ToLower();
+                        }
+
+                        t = (configWsl["distribution"] ?? "").ToString();
+                        if (t != "")
+                        {
+                            distribution = t;
+                        }
+                    }
+
+                    var workDirLinux = workDir[0].ToString().ToLower() + workDir.Substring(2).Replace("\\", "/");
+                    bool inWsl = false;
+                    if (!workDirLinux.StartsWith(letteraDiscoWindows))
+                    {
+                        workDirLinux = "/mnt/" + workDirLinux;
+                    }
+                    else
+                    {
+                        inWsl = true;
+                        workDirLinux = workDirLinux.Substring(1);
+                    }
+
                     pathTmpWorkaround = Path.Combine(pathTmpWorkaround, "psWorkaround" + DateTime.Now.Ticks + ".sh");
                     var pathOut = Regex.Match(arguments, "--output \\\"([^\\\"]+)\\\"").Groups[1].Value;
                     pathOut = "/mnt/" + pathOut[0].ToString().ToLower() + pathOut.Substring(2).Replace("\\", "/");
-                    File.WriteAllText(pathTmpWorkaround, "cd \"" + workDirLinux + "\"\ngit " + Regex.Replace(arguments, "--output \\\"([^\\\"]+)\\\"", "--output \"" + pathOut + "\""));
+                    File.WriteAllText(pathTmpWorkaround, "cd \"" + workDirLinux + "\"" + (inWsl ? "\ngit config --global --replace-all safe.directory \"" + workDirLinux.Substring(0, workDirLinux.Length - 1) : "") + "\"\ngit " + Regex.Replace(arguments, "--output \\\"([^\\\"]+)\\\"", "--output \"" + pathOut + "\""));
 
                     startInfo = new()
                     {
@@ -134,8 +166,8 @@ namespace GitUI.UserControls
                         RedirectStandardError = true,
                         StandardOutputEncoding = outputEncoding,
                         StandardErrorEncoding = outputEncoding,
-                        FileName = "bash.exe",
-                        Arguments = "/mnt/" + pathTmpWorkaround[0].ToString().ToLower() + pathTmpWorkaround.Substring(2).Replace("\\", "/"),
+                        FileName = "wsl",
+                        Arguments = "-d " + distribution + " --cd \"" + workDirLinux + "\" -- /mnt/" + pathTmpWorkaround[0].ToString().ToLower() + pathTmpWorkaround.Substring(2).Replace("\\", "/"),
                         WorkingDirectory = workDir
                     };
                 }
