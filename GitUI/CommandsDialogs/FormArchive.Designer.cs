@@ -40,6 +40,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btnChooseRevision = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.cmbParameters = new System.Windows.Forms.ComboBox();
             this.lstBundles = new System.Windows.Forms.ListBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtTagDeployed = new System.Windows.Forms.TextBox();
@@ -221,6 +223,8 @@
             // groupBox2
             // 
             this.tableLayoutPanel4.SetColumnSpan(this.groupBox2, 2);
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.cmbParameters);
             this.groupBox2.Controls.Add(this.lstBundles);
             this.groupBox2.Controls.Add(this.label3);
             this.groupBox2.Controls.Add(this.txtTagDeployed);
@@ -241,22 +245,43 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Filter files";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(283, 147);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(117, 15);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "preset da parameters";
+            // 
+            // cmbParameters
+            // 
+            this.cmbParameters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbParameters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbParameters.FormattingEnabled = true;
+            this.cmbParameters.Location = new System.Drawing.Point(406, 144);
+            this.cmbParameters.Name = "cmbParameters";
+            this.cmbParameters.Size = new System.Drawing.Size(148, 23);
+            this.cmbParameters.TabIndex = 10;
+            this.cmbParameters.SelectedIndexChanged += new System.EventHandler(this.cmbParameters_SelectedIndexChanged);
+            // 
             // lstBundles
             // 
             this.lstBundles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.lstBundles.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lstBundles.FormattingEnabled = true;
-            this.lstBundles.ItemHeight = 15;
-            this.lstBundles.Location = new System.Drawing.Point(288, 51);
+            this.lstBundles.Location = new System.Drawing.Point(288, 21);
             this.lstBundles.Name = "lstBundles";
             this.lstBundles.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.lstBundles.Size = new System.Drawing.Size(266, 79);
+            this.lstBundles.Size = new System.Drawing.Size(266, 121);
             this.lstBundles.TabIndex = 9;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(283, 34);
+            this.label3.Location = new System.Drawing.Point(283, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(258, 15);
             this.label3.TabIndex = 8;
@@ -556,5 +581,7 @@
         private RadioButton radioButton4;
         private Label label3;
         private ListBox lstBundles;
+        private Label label5;
+        private ComboBox cmbParameters;
     }
 }

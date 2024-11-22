@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft-WindowsAPICodePack-Core" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" />
     <PackageReference Include="JetBrains.Annotations" />
+    <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 
   <ItemGroup>

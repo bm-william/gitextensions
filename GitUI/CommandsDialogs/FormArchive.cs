@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System.Collections;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
@@ -9,6 +10,7 @@ using GitUI.HelperDialogs;
 using GitUI.Properties;
 using GitUIPluginInterfaces;
 using ResourceManager;
+using YamlDotNet.Serialization;
 
 namespace GitUI.CommandsDialogs
 {
@@ -105,6 +107,7 @@ namespace GitUI.CommandsDialogs
             labelMessage.Font = new System.Drawing.Font(labelMessage.Font, System.Drawing.FontStyle.Bold);
         }
 
+        private Dictionary<string, List<string>> _bundlesPreset = new();
         private void FormArchive_Load(object sender, EventArgs e)
         {
             buttonArchiveRevision.Focus();
@@ -134,6 +137,36 @@ namespace GitUI.CommandsDialogs
                 bundles.Sort();
                 lstBundles.DataSource = bundles.ToArray();
                 lstBundles.SelectedIndex = -1;
+                var pathConfig = Path.Combine(Module.WorkingDir, "config");
+                _bundlesPreset.Clear();
+                _bundlesPreset.Add("Nessuno", new List<string>());
+                foreach (var path in Directory.GetFiles(pathConfig))
+                {
+                    if (path.EndsWith(".yaml") && !path.Contains("parameters.base.yaml"))
+                    {
+                        var contents = File.ReadAllText(path);
+                        if (contents.StartsWith("parameters:"))
+                        {
+                            List<string> bundlesP = new();
+                            var deserializer = new Deserializer();
+                            var result = deserializer.Deserialize<Dictionary<string, object>>(new StringReader(contents));
+                            foreach (KeyValuePair<object, object> item in (IEnumerable)result["parameters"])
+                            {
+                                if (item.Key.ToString() == "core_bundles" || item.Key.ToString() == "bundles_azienda" || item.Key.ToString() == "whitelist_bundles")
+                                {
+                                    foreach (var sub in (IEnumerable)item.Value)
+                                    {
+                                        bundlesP.Add(sub.ToString().Replace("Bundle", "") + "Bundle");
+                                    }
+                                }
+                            }
+
+                            _bundlesPreset.Add(path.Substring(path.LastIndexOf("\\") + 1).Replace(".yaml", ""), bundlesP);
+                        }
+                    }
+                }
+
+                cmbParameters.DataSource = _bundlesPreset.Keys.ToList();
             }
         }
 
@@ -388,6 +421,31 @@ namespace GitUI.CommandsDialogs
             if (checkboxRevisionFilter.Checked)
             {
                 checkBoxPathFilter.Checked = false;
+            }
+        }
+
+        private void cmbParameters_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbParameters.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            if (_bundlesPreset.ContainsKey(cmbParameters.SelectedValue.ToString()))
+            {
+                try
+                {
+                    lstBundles.SelectedIndices.Clear();
+                    foreach (var bundle in _bundlesPreset[cmbParameters.SelectedValue.ToString()])
+                    {
+                        var list = ((string[])lstBundles.DataSource).ToList();
+                        lstBundles.SelectedIndices.Add(list.IndexOf(bundle));
+                    }
+                }
+                catch
+                {
+                    lstBundles.SelectedIndices.Clear();
+                }
             }
         }
     }
